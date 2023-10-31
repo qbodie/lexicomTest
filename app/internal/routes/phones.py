@@ -1,12 +1,18 @@
 from fastapi import APIRouter, Query
 from app.pkg.redis_tools.tools import RedisTools
+from app.internal.schemas.phone_address import Phone
 
 router = APIRouter(
     prefix='/api/v1'
 )
 
 
-def is_exist(phone: int):
+def is_exist(phone: str):
+    """
+    Проверка наличия номера в списке уже имеющихся
+
+    Возвращает ошибку или True
+    """
 
     if phone not in [s.decode('utf-8') for s in RedisTools.get_data()]:
 
@@ -19,11 +25,12 @@ def is_exist(phone: int):
 
 @router.get('/get_all')
 def get_all():
+
     return RedisTools.get_data()
 
 
 @router.get('/check_data')
-def get_address(phone: int):
+def get_address(phone: str):
 
     if is_exist(phone):
 
@@ -33,7 +40,7 @@ def get_address(phone: int):
 
 
 @router.post('/write_data')
-def write_data(phone: int, address: str):
+def write_data(phone: str, address: str):
 
     RedisTools.set_phone(phone, address)
 
@@ -43,7 +50,7 @@ def write_data(phone: int, address: str):
 
 
 @router.patch('/write_data')
-def update_data(phone: int, address:str):
+def update_data(phone: str, address:str):
 
     if is_exist(phone):
 

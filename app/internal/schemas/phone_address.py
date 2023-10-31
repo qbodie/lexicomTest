@@ -1,13 +1,13 @@
 from pydantic import BaseModel, field_validator
 
 
-class PhoneAddress(BaseModel):
+class Phone(BaseModel):
+    """ Валидирует номер телефона, который присылает пользователь """
 
-    phone: int
-    address: str
+    phone: str
 
     @field_validator('phone')
-    def is_correct(cls, v: int) -> int:
+    def is_correct(cls, v: str) -> str:
 
         if len(v) != 10:
             raise ValueError('That\'s incorrect number')
