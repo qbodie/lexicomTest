@@ -46,3 +46,13 @@ BEGIN
     END LOOP;
 
 END;
+
+### Другой вариант
+
+UPDATE full_names AS fn
+
+SET status = s.status
+
+FROM short_names AS s
+
+WHERE fn.filename LIKE s.filename || '%';
